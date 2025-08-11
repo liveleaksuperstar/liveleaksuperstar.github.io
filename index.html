@@ -1,0 +1,338 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>liveleak superstar</title>
+  <meta name="description" content="purveyor of esoteric items">
+
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #000000;
+      --card: #000000;
+      --accent: #5E1F10;
+      --muted: #9aa0a6;
+      --glass: rgba(255,255,255,0.03);
+      --max-width: 1100px;
+      --radius: 10px;
+      --focus: 3px;
+    }
+
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#000000 0%,var(--bg) 100%);color:#e7e7ea;font-family:Roboto,system-ui,-apple-system,Segoe UI,Arial;}
+    a{color:var(--accent)}
+
+    .container{max-width:var(--max-width);margin:28px auto;padding:18px;display:grid;grid-template-columns:260px 1fr;gap:18px;}
+
+    header.banner{grid-column:1/-1;border-radius:var(--radius);position:relative;height:220px;overflow:hidden;background-color:#222;box-shadow:0 8px 30px rgba(0,0,0,0.6);}
+    .banner-inner{position:absolute;inset:0;display:flex;align-items:flex-end;padding:14px;background:linear-gradient(0deg,rgba(0,0,0,0.65),rgba(0,0,0,0.12));}
+
+    .profile-avatar{width:120px;height:120px;border-radius:8px;border:2px solid rgb(0, 0, 0);background-size:cover;background-position:center;background-repeat:no-repeat}
+    .profile-meta{margin-left:12px;color:#fff}
+    .profile-meta h1{margin:0;font-size:22px;line-height:1}
+    .profile-meta p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* left column */
+    .left{background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    .section{margin-bottom:16px}
+    .section h2{margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px}
+    .about,.interests,.links,.mood{font-size:14px;color:#e8e8ea}
+    .tag{display:inline-block;background:rgba(255,255,255,0.02);padding:6px 8px;margin:6px 6px 0 0;border-radius:6px;font-size:13px;color:var(--muted)}
+    .link-list a{font-weight:600}
+
+    /* main */
+    .main{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:16px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+    .controls{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+    .btn{padding:8px 12px;border-radius:8px;background:var(--glass);border:1px solid rgba(255,255,255,0.03);color:#ddd;font-weight:600;cursor:pointer}
+    .btn:focus{outline:none;box-shadow:0 0 0 var(--focus) rgba(216,111,177,0.18)}
+
+    .player-wrap{margin-bottom:16px}
+    .player-title{font-weight:700;margin-bottom:6px}
+    .blog-list .post{padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:10px}
+
+    .friends-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;margin-top:10px}
+    .friend{background:rgba(255,255,255,0.02);border-radius:8px;padding:8px;text-align:center;font-size:12px;color:#ddd}
+    .friend img{width:100%;height:78px;object-fit:cover;border-radius:6px;margin-bottom:6px}
+
+    .comments .comment{padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:10px}
+
+    .footer{font-size:12px;color:var(--muted);text-align:center;margin-top:18px}
+
+    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+    @media (max-width:880px){
+      .container{grid-template-columns:1fr;padding:12px}
+      header.banner{height:160px}
+      .profile-avatar{width:96px;height:96px}
+      .profile-meta h1{font-size:18px}
+    }
+
+    @media (max-width:480px){
+      .friends-grid{grid-template-columns:repeat(3,1fr)}
+      .profile-meta p{font-size:12px}
+    }
+
+    @media (prefers-contrast:more){
+      :root{--muted:#cfd6da}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header class="banner" role="banner" aria-label="Profile banner" id="banner">
+      <div class="banner-inner">
+        <div class="profile-avatar" id="avatar" role="img" aria-label="Profile avatar"></div>
+        <div class="profile-meta">
+          <h1 id="displayName">kurt cocaine</h1>
+          <p id="subline"><span id="age">—</span> • <span id="location">—</span> • Last active: <span id="lastActive">—</span></p>
+        </div>
+      </div>
+    </header>
+
+    <aside class="left" aria-labelledby="left-heading">
+      <h2 id="left-heading" class="visually-hidden">Profile information</h2>
+
+      <section class="section" aria-labelledby="mood-heading">
+        <h2 id="mood-heading">Mood</h2>
+        <div class="mood mono" id="mood">—</div>
+      </section>
+
+      <section class="section" aria-labelledby="about-heading">
+        <h2 id="about-heading">About Me</h2>
+        <div id="about" class="about">—</div>
+      </section>
+
+      <section class="section" aria-labelledby="interests-heading">
+        <h2 id="interests-heading">Interests</h2>
+        <div id="interests" class="interests" aria-live="polite"></div>
+      </section>
+
+      <section class="section" aria-labelledby="links-heading">
+        <h2 id="links-heading">Links</h2>
+        <nav class="links link-list" id="links" aria-label="External links"></nav>
+      </section>
+    </aside>
+
+    <main class="main" id="main" role="main">
+      <div class="controls">
+        <button class="btn" id="btn-add">Add Friend</button>
+        <button class="btn" id="btn-message">Send Message</button>
+        <div style="margin-left:auto;color:var(--muted);font-size:13px">purveyor of esoteric goods</div>
+      </div>
+
+      <section class="player-wrap" aria-labelledby="player-heading">
+        <h2 id="player-heading" class="player-title">Favorite Track / Playlist</h2>
+        <div id="player-container" aria-live="polite">
+          
+          <div id="player-fallback" style="color:var(--muted);font-size:13px">No music selected yet.</div>
+        </div>
+      </section>
+
+      <section aria-labelledby="blog-heading">
+        <h2 id="blog-heading" class="section-title" style="display:none">Blog</h2>
+        <div class="section-title">Latest Blog Entries</div>
+        <div id="blog-list" class="blog-list" aria-live="polite"></div>
+      </section>
+
+      <section style="margin-top:12px" aria-labelledby="friends-heading">
+        <h2 id="friends-heading" class="section-title">Friend Space</h2>
+        <div id="friends" class="friends-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="comments" aria-labelledby="comments-heading">
+        <h2 id="comments-heading" class="section-title">Friends' Comments</h2>
+        <div id="comments-list"></div>
+      </section>
+
+      <div class="footer">rip jim - homage to myspace</div>
+    </main>
+
+  </div>
+
+  <!-- Fallback JSON embedded here so file works when opened locally. 
+       If you place a separate profile.json, it'll override this. -->
+  <script id="profile-fallback" type="application/json">
+  {
+    "displayName": "kurt cocaine",
+    "age": "20",
+    "location": "Nowhere, Internet",
+    "lastActive": "2025-08-11T12:00:00Z",
+    "avatar": "profile.png",
+    "banner": "banner.jpg",
+    "mood": "▀▄▀▄▀▄",
+    "about": "third eye blinded",
+    "interests": ["lowballing on fb marketplace"],
+    "links": [{"label":"Instagram","url":"https://www.instagram.com/liveleaksuperstarr/?utm_source=ig_web_button_share_sheet"}],
+    "spotify": "https://open.spotify.com/track/0jAREqpRxde4sjHfghbNGW?si=8ff8b385118c4dab",
+    "blog": [
+      {"title":"updates to ebay","date":"2025-08-11","excerpt":"many stuffs to come"},
+      {"title":"nekojiru","date":"2023-4-11","excerpt":"catposting will resume soon"}
+    ],
+    "friends": [
+      {"name":"stareatthewall","avatar":"stare.jpg"},
+      {"name":"ani","avatar":"ani.png"},
+      {"name":"lucyf3r","avatar":"lucy.jpg"},
+      {"name":"jumper","avatar":"girl.png"}
+    ],
+    "comments":[
+      {"author":"xXx_bacardi_angel_xXx","body":"jesus loves you if you also love jesus put this on 5 other profiles"}
+    ]
+  }
+  </script>
+
+  <script>
+    // Helper: try to load profile.json; fall back to embedded JSON
+    (async function(){
+      const container = document.documentElement;
+      let data = null;
+
+      try{
+        // Attempt to fetch profile.json from same directory. This works when served via http(s).
+        const resp = await fetch('profile.json', {cache: 'no-store'});
+        if(resp.ok){ data = await resp.json(); }
+      }catch(e){ /* ignore fetch errors and use fallback */ }
+
+      if(!data){
+        try{
+          const fallback = document.getElementById('profile-fallback');
+          data = JSON.parse(fallback.textContent);
+        }catch(e){
+          console.error('Failed to parse profile JSON fallback',e);
+          data = {};
+        }
+      }
+
+      applyProfile(data);
+    })();
+
+    function applyProfile(data){
+      // Banner
+      const banner = document.getElementById('banner');
+      if(data.banner) banner.style.backgroundImage = `url('${data.banner}')`;
+
+      // Avatar
+      const avatar = document.getElementById('avatar');
+      avatar.style.backgroundImage = `url('${data.avatar || ''}')`;
+      avatar.setAttribute('aria-label', (data.displayName || 'Profile') + ' avatar');
+
+      // Basic meta
+      document.getElementById('displayName').textContent = data.displayName || 'kurt cocaine';
+      document.getElementById('age').textContent = data.age || '—';
+      document.getElementById('location').textContent = data.location || '—';
+      if(data.lastActive){
+        // format date to readable local string
+        try{ document.getElementById('lastActive').textContent = new Date(data.lastActive).toLocaleString(); }catch(e){ document.getElementById('lastActive').textContent = data.lastActive; }
+      }
+
+      // About
+      document.getElementById('about').textContent = data.about || '';
+
+      // Mood
+      document.getElementById('mood').textContent = data.mood || '';
+
+      // Interests
+      const interestsEl = document.getElementById('interests'); interestsEl.innerHTML = '';
+      (data.interests || []).forEach(i=>{
+        const s = document.createElement('span'); s.className='tag'; s.textContent = i; interestsEl.appendChild(s);
+      });
+
+      // Links
+      const linksEl = document.getElementById('links'); linksEl.innerHTML = '';
+      (data.links || []).forEach(l=>{
+        const a = document.createElement('a'); a.href = l.url; a.textContent = l.label; a.target='_blank'; a.rel='noopener'; linksEl.appendChild(a); linksEl.appendChild(document.createElement('br'));
+      });
+
+      // Blog
+      const blogList = document.getElementById('blog-list'); blogList.innerHTML = '';
+      (data.blog || []).forEach(post=>{
+        const art = document.createElement('article'); art.className='post';
+        art.innerHTML = `<div style="font-weight:700">${escapeHtml(post.title)}</div><div style="font-size:13px;color:var(--muted)">${escapeHtml(post.date)}</div><p style="margin-top:6px">${escapeHtml(post.excerpt)}</p>`;
+        blogList.appendChild(art);
+      });
+
+      // Friends
+      const friends = document.getElementById('friends'); friends.innerHTML='';
+      (data.friends || []).forEach(f=>{
+        const d = document.createElement('div'); d.className='friend';
+        d.innerHTML = `<img src="${f.avatar}" alt="${escapeHtml(f.name)}"><div>${escapeHtml(f.name)}</div>`;
+        friends.appendChild(d);
+      });
+
+      // Comments
+      const comments = document.getElementById('comments-list'); comments.innerHTML='';
+      (data.comments || []).forEach(c=>{
+        const el = document.createElement('div'); el.className='comment'; el.innerHTML = `<strong>${escapeHtml(c.author)}</strong> — ${escapeHtml(c.body)}`; comments.appendChild(el);
+      });
+
+      // Spotify embed handling
+      const playerContainer = document.getElementById('player-container'); playerContainer.innerHTML = '';
+      if(data.spotify){
+        const src = normalizeSpotifyEmbedUrl(data.spotify);
+        const type = spotifyEmbedType(src);
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', src);
+        iframe.setAttribute('width','100%');
+        iframe.setAttribute('frameborder','0');
+        iframe.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+        iframe.setAttribute('loading','lazy');
+        iframe.style.borderRadius = '10px';
+        // auto-height based on type
+        if(type === 'track') iframe.style.height = '152px';
+        else if(type === 'playlist' || type === 'album' ) iframe.style.height = '380px';
+        else iframe.style.height = '200px';
+
+        playerContainer.appendChild(iframe);
+      } else {
+        const fallback = document.getElementById('player-fallback'); if(fallback) playerContainer.appendChild(fallback.cloneNode(true));
+      }
+
+      // small demo actions for buttons (non-destructive)
+      document.getElementById('btn-add').addEventListener('click', ()=>alert('too lazy to implement this'));
+      document.getElementById('btn-message').addEventListener('click', ()=>alert('even lazier to implement this'));
+
+    }
+
+    // Normalize Spotify embed input so user can paste full share URL, regular URL, or embed URL
+    function normalizeSpotifyEmbedUrl(u){
+      if(!u) return '';
+      try{
+        // if already an embed url, return as-is
+        if(u.includes('open.spotify.com/embed')) return u;
+        // if spotify URI like spotify:track:... convert
+        if(u.startsWith('spotify:')){
+          const parts = u.split(':');
+          if(parts.length >= 3) return `https://open.spotify.com/embed/${parts[1]}/${parts[2]}`;
+        }
+        // otherwise try to parse as normal open.spotify.com url and convert
+        const url = new URL(u);
+        if(url.hostname.includes('spotify.com')){
+          // typical path: /track/{id} or /playlist/{id} or /album/{id}
+          const p = url.pathname.replace(/^\/+/, '');
+          // some share links include /track/...?si=..., remove query
+          const clean = p.split('/').slice(0,2).join('/');
+          return `https://open.spotify.com/embed/${clean}`;
+        }
+      }catch(e){
+        // if parsing fails, return input — iframe may fail too
+      }
+      return u;
+    }
+
+    function spotifyEmbedType(src){
+      if(!src) return null;
+      if(src.includes('/track/')) return 'track';
+      if(src.includes('/playlist/')) return 'playlist';
+      if(src.includes('/album/')) return 'album';
+      return null;
+    }
+
+    // small escape helper
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\\':'\\\\','"':'&quot;'}[c])); }
+
+  </script>
+</body>
+</html>
